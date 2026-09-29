@@ -1,0 +1,36 @@
+# secrets / local config
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# database + generated files
+backend/storage/
+*.db
+*.db-wal
+*.db-shm
+
+# node
+node_modules/
+dist/
+*.tsbuildinfo
+npm-debug.log*
+
+# dev server logs
+vite-dev.log
+vite-dev.err.log
+preview.log
+
+# editors / os
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
