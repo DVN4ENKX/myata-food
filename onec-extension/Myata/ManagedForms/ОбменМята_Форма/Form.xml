@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0">
+	<Properties>
+		<Name>ОбменМята_Форма</Name>
+		<Synonym>
+			<ru>Настройка обмена с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Адрес сервера, учётные данные и ручной запуск обмена с web-приложением Myata.</ru>
+		</Comment>
+		<FormType>Managed</FormType>
+		<IncludeInStandAloneMode>true</IncludeInStandAloneMode>
+		<DefaultForm>False</DefaultForm>
+		<DefaultFormType>Managed</DefaultFormType>
+		<UseForStandAloneMode>true</UseForStandAloneMode>
+		<Attributes>
+			<Attribute uuid="a1b0c0d1-0001-4000-8000-000000000001">
+				<Properties>
+					<Name>АдресСервера</Name>
+					<Synonym>
+						<ru>Адрес сервера</ru>
+					</Synonym>
+					<Comment>
+						<ru>Например https://myata.ru. Если публикация лежит в подкаталоге, добавьте его: https://host/myata.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0002-4000-8000-000000000002">
+				<Properties>
+					<Name>Логин</Name>
+					<Synonym>
+						<ru>Логин Myata</ru>
+					</Synonym>
+					<Comment>
+						<ru>Пользователь с ролью «Отчёт» - только ему доступен приём данных.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0003-4000-8000-000000000003">
+				<Properties>
+					<Name>Пароль</Name>
+					<Synonym>
+						<ru>Пароль Myata</ru>
+					</Synonym>
+					<Comment>
+						<ru>Пароль пользователя Myata. Хранится в регистре настроек расширения.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0004-4000-8000-000000000004">
+				<Properties>
+					<Name>ЛогинСервиса</Name>
+					<Synonym>
+						<ru>Логин веб-сервиса</ru>
+					</Synonym>
+					<Comment>
+						<ru>Логин basic-авторизации на HTTP-сервис 1С. Вписывается в Myata в «Логин» настроек интеграции.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0005-4000-8000-000000000005">
+				<Properties>
+					<Name>ПарольСервиса</Name>
+					<Synonym>
+						<ru>Пароль веб-сервиса</ru>
+					</Synonym>
+					<Comment>
+						<ru>Пароль basic-авторизации на HTTP-сервис 1С.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0006-4000-8000-000000000006">
+				<Properties>
+					<Name>ПроверятьПарольСервиса</Name>
+					<Synonym>
+						<ru>Проверять пароль сервиса</ru>
+					</Synonym>
+					<Comment>
+						<ru>Включите, если Myata настроен на отправку с логином и паролем.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:boolean</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0007-4000-8000-000000000007">
+				<Properties>
+					<Name>ОтправлятьНоменклатуру</Name>
+					<Synonym>
+						<ru>Отправлять номенклатуру</ru>
+					</Synonym>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:boolean</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0008-4000-8000-000000000008">
+				<Properties>
+					<Name>ОтправлятьГруппы</Name>
+					<Synonym>
+						<ru>Отправлять группы номенклатуры</ru>
+					</Synonym>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:boolean</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-0009-4000-8000-000000000009">
+				<Properties>
+					<Name>ОграничитьКоличество</Name>
+					<Synonym>
+						<ru>Ограничить количество позиций</ru>
+					</Synonym>
+					<Comment>
+						<ru>0 - отправлять всё. Ограничение удобно при первой проверке на большом меню.</ru>
+					</Comment>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:decimal</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-000a-4000-8000-00000000000a">
+				<Properties>
+					<Name>Таймаут</Name>
+					<Synonym>
+						<ru>Таймаут, с</ru>
+					</Synonym>
+					<Type>
+						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:decimal</v8:Type>
+					</Type>
+				</Properties>
+			</Attribute>
+			<Attribute uuid="a1b0c0d1-000b-4000-8000-000000000000">				<Properties>					<Name>СоздаватьЧекККМ</Name>					<Synonym>						<ru>Создавать чеки ККМ</ru>					</Synonym>					<Comment>						<ru>Включите, чтобы расширение создавало черновик чека ККМ по заказам Myata.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:boolean</v8:Type>					</Type>				</Properties>			</Attribute>			<Attribute uuid="a1b0c0d1-000c-4000-8000-000000000000">				<Properties>					<Name>Организация</Name>					<Synonym>						<ru>Организация</ru>					</Synonym>					<Comment>						<ru>Наименование организации для чеков. Оставьте пустым, если в 1С она одна.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>					</Type>				</Properties>			</Attribute>			<Attribute uuid="a1b0c0d1-000d-4000-8000-000000000000">				<Properties>					<Name>Склад</Name>					<Synonym>						<ru>Склад</ru>					</Synonym>					<Comment>						<ru>Наименование склада, который будет в чеках.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>					</Type>				</Properties>			</Attribute>			<Attribute uuid="a1b0c0d1-000e-4000-8000-000000000000">				<Properties>					<Name>Продавец</Name>					<Synonym>						<ru>Продавец</ru>					</Synonym>					<Comment>						<ru>Наименование сотрудника - продавца чека.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>					</Type>				</Properties>			</Attribute>			<Attribute uuid="a1b0c0d1-000f-4000-8000-000000000000">				<Properties>					<Name>Валюта</Name>					<Synonym>						<ru>Валюта</ru>					</Synonym>					<Comment>						<ru>Наименование валюты чека. Обычно определяется автоматически.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>					</Type>				</Properties>			</Attribute>			<Attribute uuid="a1b0c0d1-0010-4000-8000-000000000000">				<Properties>					<Name>СтатусыДляЧеков</Name>					<Synonym>						<ru>Статусы заказа для чека</ru>					</Synonym>					<Comment>						<ru>Через запятую. Пусто - создавать чек для любого статуса.</ru>					</Comment>					<Type>						<v8:Type xmlns:v8="http://v8.1c.ru/8.1/data/core">xs:string</v8:Type>					</Type>				</Properties>			</Attribute>		</Attributes>
+		<FormCommands>
+			<Command uuid="a1b0c0d1-1001-4000-8000-000000000001">
+				<Properties>
+					<Name>СохранитьНастройки</Name>
+					<Title>
+						<ru>Сохранить настройки</ru>
+					</Title>
+					<Shortcut>Ctrl+S</Shortcut>
+				</Properties>
+			</Command>
+			<Command uuid="a1b0c0d1-1002-4000-8000-000000000002">
+				<Properties>
+					<Name>ПроверитьСвязь</Name>
+					<Title>
+						<ru>Проверить связь</ru>
+					</Title>
+				</Properties>
+			</Command>
+			<Command uuid="a1b0c0d1-1003-4000-8000-000000000003">
+				<Properties>
+					<Name>ВыполнитьОбмен</Name>
+					<Title>
+						<ru>Выполнить обмен сейчас</ru>
+					</Title>
+				</Properties>
+			</Command>
+		</FormCommands>
+		<FormItems>
+			<Items>
+				<Item>
+					<Properties>
+						<Name>ГруппаСервер</Name>
+						<Title>
+							<ru>Сервер Myata</ru>
+						</Title>
+						<Type>Group</Type>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>АдресСервера</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервер</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>Логин</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервер</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>Пароль</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервер</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ГруппаСервис</Name>
+						<Title>
+							<ru>Веб-сервис 1С (вход со стороны Myata)</ru>
+						</Title>
+						<Type>Group</Type>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ПроверятьПарольСервиса</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервис</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ЛогинСервиса</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервис</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ПарольСервиса</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСервис</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ГруппаСостав</Name>
+						<Title>
+							<ru>Что отправлять</ru>
+						</Title>
+						<Type>Group</Type>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ОтправлятьНоменклатуру</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСостав</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ОтправлятьГруппы</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСостав</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>ОграничитьКоличество</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСостав</Parent>
+					</Properties>
+				</Item>
+				<Item>
+					<Properties>
+						<Name>Таймаут</Name>
+						<Type>Field</Type>
+						<Parent>ГруппаСостав</Parent>
+					</Properties>
+				</Item>
+			<Item>				<Properties>					<Name>ГруппаЧеки</Name>					<Title>						<ru>Чеки ККМ</ru>					</Title>					<Type>Group</Type>				</Properties>			</Item>			<Item>				<Properties>					<Name>СоздаватьЧекККМ</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			<Item>				<Properties>					<Name>Организация</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			<Item>				<Properties>					<Name>Склад</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			<Item>				<Properties>					<Name>Продавец</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			<Item>				<Properties>					<Name>Валюта</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			<Item>				<Properties>					<Name>СтатусыДляЧеков</Name>					<Type>Field</Type>					<Parent>ГруппаЧеки</Parent>				</Properties>			</Item>			</Items>
+		</FormItems>
+	</Properties>
+</Module>

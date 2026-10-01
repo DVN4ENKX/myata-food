@@ -557,7 +557,7 @@ xml = step("download export", critical=True)(
 )
 step("xml structure")(lambda: expect("СообщениеОбмена" in xml and "Номенклатура" in xml, "xml content"))
 step("xml has dishes")(lambda: expect("Борщ" in xml, "no seeded dish in xml"))
-step("xml has order")(lambda: expect("ЗаказКлиенту" in xml, "no order in xml"))
+step("xml has order")(lambda: expect("ЗаказПокупателя" in xml, "no order in xml"))
 step("1c preview")(lambda: expect("Номенклатура" in post("/admin/integration/1c/export/preview")["xml"], "preview"))
 step("1c status")(lambda: expect(get("/admin/integration/1c/status")["exchange_plan"], "status"))
 maps = step("1c sync maps", critical=True)(lambda: get("/admin/integration/1c/maps"))

@@ -45,7 +45,7 @@ export const TABLE_STATUS_LABEL: Record<string, string> = {
   free: 'Свободен',
   reserved: 'Забронирован',
   seated: 'Гости',
-  dirty: 'Уборка',
+  cleaning: 'Уборка',
 }
 
 export const RESERVATION_STATUS_LABEL: Record<string, string> = {

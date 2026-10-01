@@ -1,6 +1,6 @@
 export type Role = 'owner' | 'admin' | 'manager' | 'waiter'
 export type TableShape = 'rect' | 'round' | 'bar'
-export type TableStatus = 'free' | 'reserved' | 'seated' | 'dirty'
+export type TableStatus = 'free' | 'reserved' | 'seated' | 'cleaning'
 export type OrderStatus = 'new' | 'in_progress' | 'ready' | 'served' | 'closed' | 'cancelled'
 export type OrderSource = 'qr' | 'hall' | 'waiter'
 export type ReservationStatus = 'planned' | 'arrived' | 'cancelled' | 'no_show'

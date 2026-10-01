@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.15">
+	<ConfigurationExtensionProperties>
+		<Name>ОбменМята_Роль1</Name>
+		<Synonym>
+			<ru>Обмен с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Даёт доступ к справочникам номенклатуры и ценам для отправки в Myata.</ru>
+		</Comment>
+		<UUID>c3c0d1a2-0000-4000-8000-000000000005</UUID>
+		<Content>
+			<Right uuid="c3c0d1a2-0005-4000-8000-000000000001">
+				<Properties>
+					<Name>Использование</Name>
+					<Synonym>
+						<ru>Использование</ru>
+					</Synonym>
+					<UUID>c3c0d1a2-0005-4000-8000-000000000001</UUID>
+				</Properties>
+			</Right>
+			<Right uuid="c3c0d1a2-0005-4000-8000-000000000002">
+				<Properties>
+					<Name>Номенклатура</Name>
+					<Synonym>
+						<ru>Справочник Номенклатура</ru>
+					</Synonym>
+					<UUID>c3c0d1a2-0005-4000-8000-000000000002</UUID>
+				</Properties>
+			</Right>
+			<Right uuid="c3c0d1a2-0005-4000-8000-000000000003">
+				<Properties>
+					<Name>НоменклатураГруппы</Name>
+					<Synonym>
+						<ru>Справочник НоменклатураГруппы</ru>
+					</Synonym>
+					<UUID>c3c0d1a2-0005-4000-8000-000000000003</UUID>
+				</Properties>
+			</Right>
+			<Right uuid="c3c0d1a2-0005-4000-8000-000000000004">
+				<Properties>
+					<Name>ЦеныНоменклатуры</Name>
+					<Synonym>
+						<ru>Регистр сведений ЦеныНоменклатуры</ru>
+					</Synonym>
+					<UUID>c3c0d1a2-0005-4000-8000-000000000004</UUID>
+				</Properties>
+			</Right>
+			<Right uuid="c3c0d1a2-0005-4000-8000-000000000005">
+				<Properties>
+					<Name>ОбменМята_РегистрСведений1</Name>
+					<Synonym>
+						<ru>Регистр сведений ОбменМята_РегистрСведений1</ru>
+					</Synonym>
+					<UUID>c3c0d1a2-0005-4000-8000-000000000005</UUID>
+				</Properties>
+			</Right>
+		</Content>
+	</ConfigurationExtensionProperties>
+</MetaDataObject>

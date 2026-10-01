@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.15">
+	<ConfigurationExtensionProperties>
+		<Name>ОбменМята_Форма</Name>
+		<Synonym>
+			<ru>Настройка обмена с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Адрес сервера, учётные данные и ручной запуск обмена.</ru>
+		</Comment>
+		<FormType>Managed</FormType>
+		<FormPurpose>Object</FormPurpose>
+		<IncludeInStandAloneMode>true</IncludeInStandAloneMode>
+		<UUID>c3c0d1a2-0000-4000-8000-000000000006</UUID>
+		<Content>
+			<FormHandler uuid="c3c0d1a2-0006-4000-8000-000000000001">
+				<Properties>
+					<Name>МодульФормы</Name>
+					<Synonym>
+						<ru>Модуль формы</ru>
+					</Synonym>
+					<FileName>ОбменМята_Форма/Form.xml</FileName>
+					<UUID>c3c0d1a2-0006-4000-8000-000000000001</UUID>
+				</Properties>
+			</FormHandler>
+		</Content>
+	</ConfigurationExtensionProperties>
+</MetaDataObject>

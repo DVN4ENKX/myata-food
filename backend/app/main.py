@@ -59,6 +59,7 @@ async def _auto_export_loop() -> None:
                     orders=cfg.export_orders,
                     day_closes=cfg.export_day_closes,
                     order_statuses=["closed"],
+                    deliver=bool(cfg.endpoint_url),
                 )
             finally:
                 db.close()

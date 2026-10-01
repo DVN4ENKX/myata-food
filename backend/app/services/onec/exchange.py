@@ -35,7 +35,7 @@ from app.models.user import User
 ENTITY_CATEGORY = "Справочник.НоменклатураГруппы"
 ENTITY_DISH = "Справочник.Номенклатура"
 ENTITY_MODIFIER = "Справочник.Номенклатура"
-ENTITY_ORDER = "Документ.ЗаказКлиенту"
+ENTITY_ORDER = "Документ.ЗаказПокупателя"
 ENTITY_DAY_CLOSE = "Отчет.ЗакрытиеДня"
 ENTITY_TABLE = "Справочник.Столы"
 
@@ -115,18 +115,27 @@ def _json_field(value: str | None) -> str:
     return ",".join(str(v) for v in parsed) if isinstance(parsed, list) else ""
 
 
+def _ref_attr(db: Session, entity_type: str, local_id: Any) -> str:
+    """``Ссылка="<ref>"`` - the 1C reference key as a proper quoted attribute."""
+    return f"Ссылка={quoteattr(_ref(db, entity_type, local_id))}"
+
+
+def _bool_attr(value: Any) -> str:
+    return quoteattr("true" if value else "false")
+
+
 # --------------------------------------------------------------------------
 # node builders
 # --------------------------------------------------------------------------
 def category_node(db: Session, cat: Category) -> str:
     return "".join(
         [
-            f"<НоменклатураГруппа {quoteattr('Ссылка')}= {_ref(db, ENTITY_CATEGORY, cat.id)} "
+            f"<НоменклатураГруппа {_ref_attr(db, ENTITY_CATEGORY, cat.id)} "
             f"Код={quoteattr(str(cat.external_id or ''))} "
             f"Наименование={quoteattr(cat.name)} "
             f"Родитель={quoteattr(_ref(db, ENTITY_CATEGORY, cat.parent_id) if cat.parent_id else '')} "
-            f"ЭтоГруппа>true Порядок={cat.sort_order} "
-            f"ВМенюQR={str(cat.show_in_qr).lower()}>",
+            f"ЭтоГруппа=\"true\" Порядок={quoteattr(str(cat.sort_order))} "
+            f"ВМенюQR={_bool_attr(cat.show_in_qr)}>",
             escape(cat.description or ""),
             "</НоменклатураГруппа>",
         ]
@@ -135,35 +144,35 @@ def category_node(db: Session, cat: Category) -> str:
 
 def modifier_node(db: Session, mod: Modifier) -> str:
     return (
-        f"<Номенклатура {quoteattr('Ссылка')}= {_ref(db, ENTITY_MODIFIER, mod.id)} "
+        f"<Номенклатура {_ref_attr(db, ENTITY_MODIFIER, mod.id)} "
         f"Код={quoteattr(mod.external_id or '')} "
         f"Наименование={quoteattr(mod.name)} "
-        f"ЦенаНДС={_money(mod.price_delta)} "
-        f"ВидНДС='НДС20' Услуга=true "
-        f"Активен={str(mod.is_active).lower()}/>"
+        f"ЦенаНДС={quoteattr(_money(mod.price_delta))} "
+        f"ВидНДС=\"НДС20\" Услуга=\"true\" "
+        f"Активен={_bool_attr(mod.is_active)}/>"
     )
 
 
 def dish_node(db: Session, dish: Dish) -> str:
     return "".join(
         [
-            f"<Номенклатура {quoteattr('Ссылка')}= {_ref(db, ENTITY_DISH, dish.id)} "
+            f"<Номенклатура {_ref_attr(db, ENTITY_DISH, dish.id)} "
             f"Код={quoteattr(dish.article or dish.integration_code or '')} "
             f"Наименование={quoteattr(dish.name)} "
             f"Родитель={quoteattr(_ref(db, ENTITY_CATEGORY, dish.category_id))} "
             f"Артикул={quoteattr(dish.article or '')} "
-            f"ЦенаНДС={_money(dish.price)} "
-            f"СтараяЦенаНДС={_money(dish.old_price)} "
-            f"ВидНДС='НДС20' "
-            f"Вес={dish.weight_grams or 0} "
-            f"Калории={dish.calories or 0} "
-            f"ВремяПриготовления={dish.cooking_minutes} "
+            f"ЦенаНДС={quoteattr(_money(dish.price))} "
+            f"СтараяЦенаНДС={quoteattr(_money(dish.old_price))} "
+            f"ВидНДС=\"НДС20\" "
+            f"Вес={quoteattr(str(dish.weight_grams or 0))} "
+            f"Калории={quoteattr(str(dish.calories or 0))} "
+            f"ВремяПриготовления={quoteattr(str(dish.cooking_minutes))} "
             f"Аллергены={quoteattr(_json_field(dish.allergens))} "
             f"Теги={quoteattr(_json_field(dish.tags))} "
             f"Картинка={quoteattr(dish.image_url or '')} "
-            f"ВМеню={str(dish.is_active).lower()} "
-            f"Доступно={str(dish.is_available).lower()} "
-            f"ПоказыватьВQR={str(dish.show_in_qr).lower()}>",
+            f"ВМеню={_bool_attr(dish.is_active)} "
+            f"Доступно={_bool_attr(dish.is_available)} "
+            f"ПоказыватьВQR={_bool_attr(dish.show_in_qr)}>",
             escape(dish.description or ""),
             "</Номенклатура>",
         ]
@@ -174,52 +183,52 @@ def order_node(db: Session, order: Order) -> str:
     rows = []
     for item in order.items:
         modifiers = "".join(
-            f"<Модификатор Наименование={quoteattr(m.name)} Цена={_money(m.price_delta)}/>"
+            f"<Модификатор Наименование={quoteattr(m.name)} Цена={quoteattr(_money(m.price_delta))}/>"
             for m in item.modifiers
         )
         rows.append(
             f"<Товар Наименование={quoteattr(item.dish_name)} "
-            f"Количество={item.quantity} "
-            f"Цена={_money(int(item.price * 100))} "
+            f"Количество={quoteattr(str(item.quantity))} "
+            f"Цена={quoteattr(_money(int(item.price * 100)))} "
             f"Комментарий={quoteattr(item.comment or '')}>{modifiers}</Товар>"
         )
     return "".join(
         [
-            f"<ЗаказКлиенту {quoteattr('Ссылка')}= {_ref(db, ENTITY_ORDER, order.id)} "
+            f"<ЗаказПокупателя {_ref_attr(db, ENTITY_ORDER, order.id)} "
             f"Номер={quoteattr(order.order_number)} "
-            f"Дата={_dt(order.created_at)} "
+            f"Дата={quoteattr(_dt(order.created_at))} "
             f"Статус={quoteattr(order.status)} "
             f"Источник={quoteattr(order.source)} "
             f"Стол={quoteattr(_ref(db, ENTITY_TABLE, order.table_id) if order.table_id else '')} "
-            f"Гостей={order.guests_count} "
+            f"Гостей={quoteattr(str(order.guests_count))} "
             f"Клиент={quoteattr(order.client_name or '')} "
-            f"Итого={_money(int((order.total_amount or 0) * 100))} "
+            f"Итого={quoteattr(_money(int((order.total_amount or 0) * 100)))} "
             f"Комментарий={quoteattr(order.guest_comment or '')}>",
             "".join(rows),
-            "</ЗаказКлиенту>",
+            "</ЗаказПокупателя>",
         ]
     )
 
 
 def day_close_node(db: Session, close: DayClose) -> str:
     return (
-        f"<ЗакрытиеДня {quoteattr('Ссылка')}= {_ref(db, ENTITY_DAY_CLOSE, close.id)} "
+        f"<ЗакрытиеДня {_ref_attr(db, ENTITY_DAY_CLOSE, close.id)} "
         f"Дата={quoteattr(close.business_date)} "
-        f"Гостей={close.guests_total} "
-        f"Заказов={close.orders_total} "
-        f"Выручка={_money(int((close.revenue_total or 0) * 100))} "
-        f"Время={_dt(close.closed_at)} "
+        f"Гостей={quoteattr(str(close.guests_total))} "
+        f"Заказов={quoteattr(str(close.orders_total))} "
+        f"Выручка={quoteattr(_money(int((close.revenue_total or 0) * 100)))} "
+        f"Время={quoteattr(_dt(close.closed_at))} "
         f"Комментарий={quoteattr(close.notes or '')}/>"
     )
 
 
 def table_node(db: Session, table: Table) -> str:
     return (
-        f"<Стол {quoteattr('Ссылка')}= {_ref(db, ENTITY_TABLE, table.id)} "
+        f"<Стол {_ref_attr(db, ENTITY_TABLE, table.id)} "
         f"Код={quoteattr(table.external_id or table.name)} "
         f"Наименование={quoteattr(table.name)} "
-        f"Мест={table.seats} "
-        f"Активен={str(table.is_active).lower()}/>"
+        f"Мест={quoteattr(str(table.seats))} "
+        f"Активен={_bool_attr(table.is_active)}/>"
     )
 
 
@@ -286,7 +295,7 @@ def to_xml(
     for entity, items in nodes.items():
         if not items:
             continue
-        body.append(f'<Группа Имя={quoteattr(entity)} Количество={len(items)}>')
+        body.append(f'<Группа Имя={quoteattr(entity)} Количество={quoteattr(str(len(items)))}>')
         body.extend(items)
         body.append("</Группа>")
 
@@ -296,7 +305,7 @@ def to_xml(
         f'ПланОбмена={quoteattr(cfg.exchange_plan or exchange_name)} '
         f'ОтправкаПриложения="0" '
         f'Ид={quoteattr(uuid.uuid4().hex)} '
-        f'ДатаОтправки={_dt(datetime.now(UTC))}>'
+        f'ДатаОтправки={quoteattr(_dt(datetime.now(UTC)))}>'
         f"<Отправитель>1C</Отправитель>"
         f'<Параметры Имя="Организация" Значение={quoteattr(cfg.org_ref or "")}/>'
         f'<Параметры Имя="ВидЦены" Значение={quoteattr(cfg.price_type_ref or "")}/>'
@@ -351,12 +360,31 @@ def run_export(
 
         log.payload_preview = xml[:8000]
 
+        # The file is always written: it is the fallback when the web service
+        # is unreachable and it is what the "download" button serves.
+        path = _exports_dir() / log.file_name
+        path.write_text(xml, encoding="utf-8")
+        log.message = f"Файл сохранён: {path.name}"
+
         if deliver:
-            log.message = "Отправлено в веб-сервис 1С"
-        else:
-            path = _exports_dir() / log.file_name
-            path.write_text(xml, encoding="utf-8")
-            log.message = f"Файл сохранён: {path.name}"
+            url = cfg.endpoint_url.strip()
+            if not url:
+                log.status = "error"
+                log.message = "Не указан адрес веб-сервиса 1С (endpoint_url)"
+                log.finished_at = datetime.now(UTC)
+                db.commit()
+                return {"log": log, "xml": xml, "file_name": log.file_name,
+                        "error": log.message}
+            try:
+                answer = deliver_to_1c(url, cfg.login, cfg.password, xml)
+            except Exception as exc:  # noqa: BLE001 - reported in the log table
+                log.status = "error"
+                log.message = f"Ошибка отправки в 1С: {exc}"[:2000]
+                log.finished_at = datetime.now(UTC)
+                db.commit()
+                return {"log": log, "xml": xml, "file_name": log.file_name,
+                        "error": str(exc)}
+            log.message = f"Отправлено в 1С: {url} (ответ: {answer[:200]})"
 
         log.status = "success"
         log.finished_at = datetime.now(UTC)
@@ -383,13 +411,13 @@ def _exports_dir():
     return path
 
 
-async def deliver_to_1c(db: Session, url: str, login: str, password: str, xml: str) -> str:
-    """POST the package to a 1C HTTP web service."""
+def deliver_to_1c(url: str, login: str, password: str, xml: str) -> str:
+    """POST the package to a 1C HTTP web service (blocking, used from sync code)."""
     import httpx
 
     auth = (login, password) if login else None
-    async with httpx.AsyncClient(timeout=30.0) as client:
-        response = await client.post(
+    with httpx.Client(timeout=30.0) as client:
+        response = client.post(
             url,
             content=xml.encode("utf-8"),
             headers={"Content-Type": "application/xml; charset=utf-8"},
@@ -402,6 +430,41 @@ async def deliver_to_1c(db: Session, url: str, login: str, password: str, xml: s
 # --------------------------------------------------------------------------
 # import
 # --------------------------------------------------------------------------
+def _linked_object(db: Session, link: SyncMap | None, model: type) -> Any:
+    """Load the local object a mapping row points at, or ``None`` if it is gone."""
+    if link is None:
+        return None
+    try:
+        local_id = uuid.UUID(link.local_id)
+    except (ValueError, AttributeError, TypeError):
+        return None
+    return db.get(model, local_id)
+
+
+def _link_to(
+    db: Session,
+    link: SyncMap | None,
+    obj: Any,
+    *,
+    entity_type: str,
+    external_id: str,
+    now: datetime,
+) -> None:
+    """Point a mapping row at an object, or create the row when it is missing."""
+    if link is None:
+        db.add(
+            SyncMap(
+                entity_type=entity_type,
+                local_id=str(obj.id),
+                external_id=external_id,
+                last_synced_at=now,
+            )
+        )
+        return
+    link.local_id = str(obj.id)
+    link.last_synced_at = now
+
+
 def apply_incoming(
     db: Session,
     items: list[dict],
@@ -429,19 +492,20 @@ def apply_incoming(
                     )
                 ).scalar_one_or_none()
 
-                if link is not None:
-                    dish = db.get(Dish, uuid.UUID(link.local_id))
-                    if dish is not None:
-                        _apply_dish_fields(dish, raw)
-                        dish.external_id = external_id
-                        stats["updated"] += 1
-                        continue
+                # The mapping may point at a dish deleted on this side, so fall
+                # back to the natural key and re-point the mapping afterwards
+                # instead of inserting a duplicate that breaks the unique index.
+                dish = _linked_object(db, link, Dish)
+                if dish is None:
+                    dish = db.execute(
+                        select(Dish).where(Dish.external_id == external_id)
+                    ).scalar_one_or_none()
 
-                dish = db.execute(
-                    select(Dish).where(Dish.external_id == external_id)
-                ).scalar_one_or_none()
                 if dish is not None:
                     _apply_dish_fields(dish, raw)
+                    dish.external_id = external_id
+                    _link_to(db, link, dish, entity_type=ENTITY_DISH,
+                             external_id=external_id, now=now)
                     stats["updated"] += 1
                     continue
 
@@ -458,14 +522,8 @@ def apply_incoming(
                 db.add(dish)
                 db.flush()
                 _apply_dish_fields(dish, raw)
-                db.add(
-                    SyncMap(
-                        entity_type=ENTITY_DISH,
-                        local_id=str(dish.id),
-                        external_id=external_id,
-                        last_synced_at=now,
-                    )
-                )
+                _link_to(db, link, dish, entity_type=ENTITY_DISH,
+                         external_id=external_id, now=now)
                 stats["created"] += 1
             elif entity == ENTITY_CATEGORY:
                 link = db.execute(
@@ -474,12 +532,18 @@ def apply_incoming(
                         SyncMap.external_id == external_id,
                     )
                 ).scalar_one_or_none()
-                if link is not None:
-                    cat = db.get(Category, uuid.UUID(link.local_id))
-                    if cat is not None:
-                        cat.name = str(raw.get("name") or cat.name)
-                        cat.external_id = external_id
-                        stats["updated"] += 1
+                cat = _linked_object(db, link, Category)
+                if cat is None:
+                    cat = db.execute(
+                        select(Category).where(Category.external_id == external_id)
+                    ).scalar_one_or_none()
+
+                if cat is not None:
+                    cat.name = str(raw.get("name") or cat.name)
+                    cat.external_id = external_id
+                    _link_to(db, link, cat, entity_type=ENTITY_CATEGORY,
+                             external_id=external_id, now=now)
+                    stats["updated"] += 1
                 elif create_missing:
                     cat = Category(
                         name=str(raw.get("name") or "Группа из 1С"),
@@ -488,14 +552,8 @@ def apply_incoming(
                     )
                     db.add(cat)
                     db.flush()
-                    db.add(
-                        SyncMap(
-                            entity_type=ENTITY_CATEGORY,
-                            local_id=str(cat.id),
-                            external_id=external_id,
-                            last_synced_at=now,
-                        )
-                    )
+                    _link_to(db, link, cat, entity_type=ENTITY_CATEGORY,
+                             external_id=external_id, now=now)
                     stats["created"] += 1
         except Exception as exc:  # noqa: BLE001 - one bad row must not kill the batch
             stats["errors"].append(str(exc)[:300])

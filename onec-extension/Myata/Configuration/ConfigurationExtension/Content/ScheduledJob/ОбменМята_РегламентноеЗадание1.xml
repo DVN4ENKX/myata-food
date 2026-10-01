@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.15">
+	<ConfigurationExtensionProperties>
+		<Name>ОбменМята_РегламентноеЗадание1</Name>
+		<Synonym>
+			<ru>Обмен с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Регламентное задание: периодически отправляет номенклатуру в Myata.</ru>
+		</Comment>
+		<PredefinedMethodName>ОбменМята_ОбщийМодуль1.ВыполнитьОбмен</PredefinedMethodName>
+		<UseBackgroundJob>true</UseBackgroundJob>
+		<ClientApplicationType/>
+		<ExternalConnection>false</ExternalConnection>
+		<OverrunPolicy>Ignore</OverrunPolicy>
+		<UUID>c3c0d1a2-0000-4000-8000-000000000004</UUID>
+		<Schedule>
+			<Properties>
+				<Name>ПоРаписанию</Name>
+				<Synonym>
+					<ru>По расписанию</ru>
+				</Synonym>
+				<Expression>ПоРаписанию</Expression>
+				<Values>
+					<Value>
+						<Properties>
+							<StartDate>2026-01-01T00:00:00</StartDate>
+							<Period>3600</Period>
+							<RepeatPeriod>3600</RepeatPeriod>
+							<RepeatPeriods>В день</RepeatPeriods>
+							<EndDate>2030-01-01T00:00:00</EndDate>
+						</Properties>
+					</Value>
+				</Values>
+				<UUID>c3c0d1a2-0004-4000-8000-000000000001</UUID>
+			</Properties>
+		</Schedule>
+	</ConfigurationExtensionProperties>
+</MetaDataObject>

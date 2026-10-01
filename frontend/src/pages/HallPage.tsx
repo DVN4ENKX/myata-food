@@ -30,7 +30,7 @@ interface DragState {
 const STATUS_TONE: Record<string, 'good' | 'warn' | 'bad' | 'default'> = {
   seated: 'good',
   reserved: 'warn',
-  dirty: 'bad',
+  cleaning: 'bad',
   free: 'default',
 }
 
@@ -146,6 +146,10 @@ export default function HallPage() {
       toasts.error(e instanceof Error ? e.message : 'Ошибка сохранения')
     }
   }
+
+  // a table needs closing while a session is still open or orders are still unpaid;
+  // a cleaning table keeps its session, so it would otherwise be stuck forever
+  const needsClose = (table: Table) => table.current_session !== null || table.open_orders > 0
 
   const closeTable = async (table: Table) => {
     try {
@@ -277,7 +281,7 @@ export default function HallPage() {
                     <Button small onClick={() => setSeatTarget(table)}>
                       {table.status === 'seated' ? 'Изменить' : 'Посадить'}
                     </Button>
-                    {table.status === 'seated' ? (
+                    {needsClose(table) ? (
                       <Button small variant="danger" onClick={() => closeTable(table)}>
                         Закрыть
                       </Button>

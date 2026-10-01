@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.15">
+	<ConfigurationExtensionProperties>
+		<Name>ОбменМята_HTTPСервис1</Name>
+		<Synonym>
+			<ru>Обмен с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Точка входа для XML-пакетов из web-приложения: POST /hs/myata/ПриёмСообщения</ru>
+		</Comment>
+		<HTTPServiceRootURL>myata</HTTPServiceRootURL>
+		<ReuseSessions>true</ReuseSessions>
+		<SessionTimeOut>600</SessionTimeOut>
+		<UUID>c3c0d1a2-0000-4000-8000-000000000002</UUID>
+		<Content>
+			<HTTPServiceMethod uuid="c3c0d1a2-0001-4000-8000-000000000001">
+				<Properties>
+					<Name>ПриёмСообщения</Name>
+					<Synonym>
+						<ru>Приём сообщения обмена</ru>
+					</Synonym>
+					<HTTPMethod>POST</HTTPMethod>
+					<HandlerName>ОбменМята_HTTPСервис1.ПриёмСообщения</HandlerName>
+					<ContentType>application/xml</ContentType>
+					<UUID>c3c0d1a2-0001-4000-8000-000000000001</UUID>
+				</Properties>
+			</HTTPServiceMethod>
+			<HTTPServiceMethod uuid="c3c0d1a2-0002-4000-8000-000000000002">
+				<Properties>
+					<Name>Проверка</Name>
+					<Synonym>
+						<ru>Проверка доступности</ru>
+					</Synonym>
+					<HTTPMethod>GET</HTTPMethod>
+					<HandlerName>ОбменМята_HTTPСервис1.Проверка</HandlerName>
+					<ContentType>text/plain</ContentType>
+					<UUID>c3c0d1a2-0002-4000-8000-000000000002</UUID>
+				</Properties>
+			</HTTPServiceMethod>
+		</Content>
+	</ConfigurationExtensionProperties>
+</MetaDataObject>

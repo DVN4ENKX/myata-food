@@ -81,7 +81,7 @@ def sync_maps(_: Reporter, db: DbSession, limit: int = Query(200, ge=1, le=2000)
 
 
 @router.post("/export", response_model=ExportResult)
-def export_now(    payload: ExportRequest, user: MenuEditor, db: DbSession) -> ExportResult:
+def export_now(payload: ExportRequest, user: MenuEditor, db: DbSession) -> ExportResult:
     result = onec.run_export(
         db,
         categories=payload.categories,
@@ -92,9 +92,11 @@ def export_now(    payload: ExportRequest, user: MenuEditor, db: DbSession) -> E
         order_statuses=payload.order_status,
         since=payload.since,
         user=user,
-        deliver=False,
+        deliver=payload.deliver,
     )
     log = result["log"]
+    if result.get("error"):
+        raise HTTPException(status_code=502, detail=result["error"])
     return ExportResult(
         log_id=log.id,
         file_name=result.get("file_name") or "",

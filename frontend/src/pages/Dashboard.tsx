@@ -8,7 +8,7 @@ import { Card, Empty, ErrorNote, Pill, Spinner, Stat, Toasts, useToasts, Button 
 function statusTone(status: Table['status']): 'good' | 'warn' | 'bad' | 'default' {
   if (status === 'seated') return 'good'
   if (status === 'reserved') return 'warn'
-  if (status === 'dirty') return 'bad'
+  if (status === 'cleaning') return 'bad'
   return 'default'
 }
 
@@ -50,6 +50,19 @@ export default function Dashboard() {
       void load()
     } catch (e) {
       toasts.error(e instanceof Error ? e.message : 'Ошибка посадки')
+    }
+  }
+
+  // a table needs closing while a session is still open or orders are still unpaid
+  const needsClose = (table: Table) => table.current_session !== null || table.open_orders > 0
+
+  const close = async (table: Table) => {
+    try {
+      await api.post(`/admin/occupancy/tables/${table.id}/close`, { clear_tables: true })
+      toasts.ok(`${table.name} закрыт`)
+      void load()
+    } catch (e) {
+      toasts.error(e instanceof Error ? e.message : 'Ошибка закрытия')
     }
   }
 
@@ -114,6 +127,11 @@ export default function Dashboard() {
                       <Link className="btn btn-sm" to={`/orders?table=${table.id}`}>
                         Заказы
                       </Link>
+                    ) : null}
+                    {needsClose(table) ? (
+                      <Button small variant="danger" onClick={() => close(table)}>
+                        Закрыть
+                      </Button>
                     ) : null}
                   </div>
                 ))}

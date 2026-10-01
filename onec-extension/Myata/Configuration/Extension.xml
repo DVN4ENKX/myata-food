@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.15">
+	<ConfigurationExtensionProperties>
+		<Name>ОбменМята</Name>
+		<Synonym>
+			<ru>Обмен с Myata</ru>
+		</Synonym>
+		<Comment>
+			<ru>Приём каталога, заказов и закрытий дня из web-приложения Myata и отправка номенклатуры обратно.</ru>
+		</Comment>
+		<Version>1.0.0.1</Version>
+		<CompatibilityMode>8.3.27</CompatibilityMode>
+		<ConfigurationExtensionType>Configuration</ConfigurationExtensionType>
+		<DefaultLanguage>ru</DefaultLanguage>
+		<RequiredSubsystems>
+			<MainSubsystem/>
+		</RequiredSubsystems>
+	</ConfigurationExtensionProperties>
+</MetaDataObject>
